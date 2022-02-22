@@ -1,0 +1,93 @@
+﻿@{
+    var status = Context.Request.Query["status"];
+   
+     var all="text-primary";
+     var newOrder = "text-primary";
+     var confirmed = "text-primary";
+     var inProcessing = "text-primary";
+     var sending = "text-primary";
+     var receive = "text-primary";
+
+    switch (status)
+    {
+        case "newOrder":           
+            newOrder = "active text-white";
+        break;
+        case "confirmed":
+            confirmed = "active text-white";
+        break;
+        case "inProcessing":
+            inProcessing = "active text-white";
+        break;
+        case "sending":
+            sending = "active text-white";
+        break;
+        case "receive":
+            receive = "active text-white";
+        break;
+        default:
+            all = "active text-white";
+        break;
+    }
+
+}
+
+
+
+<div class="p-3">
+    <div class="d-flex justify-content-between pt-4">
+        <div class="pt-2">
+            <h2 class="text-primary">Order List</h2>
+		</div>
+        <div class="pt-2">
+			
+             <ul class="list-group list-group-horizontal-sm">
+                <a style="text-decoration:none;" asp-controller="Order"
+                    asp-action="Index" asp-route-status="newOrder">
+                    <li class="list-group-item @newOrder">Нове замовлення</li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Order"
+                    asp-action="Index" asp-route-status="confirmed">
+                    <li class="list-group-item @confirmed">Підтверджене</li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Order"
+                    asp-action="Index" asp-route-status="inProcessing">
+                    <li class="list-group-item @inProcessing">В обробці</li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Order"
+                    asp-action="Index" asp-route-status="sending">
+                    <li class="list-group-item @sending">Відправлене</li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Order"
+                    asp-action="Index" asp-route-status="receive">
+                    <li class="list-group-item @receive">Отримане</li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Order"
+                    asp-action="Index" asp-route-status="all">
+                    <li class="list-group-item @all">Усе</li>
+                </a>
+            </ul>
+
+
+		</div>
+	</div>
+    <br /><br />
+
+<table  id="tblData"  class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th></th>
+		</tr>
+	</thead>
+</table>
+</div>
+
+@section Scripts{
+    <script src="~/js/order.js"></script>
+}
