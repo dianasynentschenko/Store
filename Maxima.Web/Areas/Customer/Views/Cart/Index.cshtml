@@ -1,75 +1,103 @@
 ﻿@model Maxima.Models.ViewModels.ShoppingCartVM
+
 <form method="post">
-	<br />
-	<div class="container">
-		<div class="card">
-			<div class="card-header bg-dark text-light ml-0">
-				<div class="row">
-					<div class="col-6  pt-2">
-						<i class="fa fa-shopping-cart"></i> &nbsp;
-						Shopping Cart
-					</div>
-					<div class="col-6 text-end">
-						<a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-outline-info btn-sm">Continue Shopping</a>
-					</div>
-				</div>
-			</div>
+    <div class="container">
+        <section>
+            <div class="container">
+                <div class="row d-flex justify-content-center align-items-center">
+                    <div class="col">
+                        <p><span class="product_card_secondary_text">BASKET</span><span class="product_card_accent_text"> + @Model.ListCart.Count().ToString()</span></p>
 
-			<div class="card-body">
-				@foreach(var item in Model.ListCart){
-				<div class="row">
-					<div class="d-none d-lg-block col-lg-1 text-center py-2">
-						<img src="@item.Product.ImageUrl" class="rounded" width="100%" />
-					</div>
-					<div class="col-12 col-lg-6 pt-md-3">
-						<h5><strong>@item.Product.Name</strong></h5>
-						<p><small>@Html.Raw(item.Product.Description)</small></p>
-					</div>
-					<div class="col-12  col-lg-5 text-center row">
-						<div class="col-4 text-md-right pt-4">
-							<h6><strong>@item.Price.ToString();
-								<span class="text-muted">&nbsp;x&nbsp;</span>@item.Count </strong></h6>
-						</div>
-						<div class="col-6 col-sm-4 col-lg-6 pt-2">
-							<div class="w-75 btn-group" role="group">
-								<a asp-action="plus" asp-route-cartId="@item.Id" class="btn btn-primary">
-									<i class="bi bi-plus-square"></i>
-								</a> &nbsp;
-								<a asp-action="minus" asp-route-cartId="@item.Id" class="btn btn-warning">
-									<i class="bi bi-dash-square"></i>
-								</a>
-							</div>
 
-						</div>
-						<div class="col-2 col-sm-4 col-lg-2 text-right pt-2">
-							<a asp-action="remove" asp-route-cartId="@item.Id" class="btn btn-danger">
-								<i class="bi bi-trash-fill"></i>
-							</a>
-						</div>
-					</div>
-				</div>
-				<hr />
-				}
-				<div class="row">
-					<div class="col-12 col-md-6 offset-md-6 col-lg-4 offset-lg-8 pr-4">
-						<ul class="list-group">
-							<li class="list-group-item d-flex justify-content-between bg-light">
-								<span class="text-info"> Total (USD)</span>
-								<strong class="text-info">@Model.OrderHeader.OrderTotal.ToString() </strong>
-							</li>
-						</ul>
-					</div>
-				</div>
+                        @foreach (var item in Model.ListCart)
+                        {
+                            <div class="card mb-4 bg-gradient-secondary ">
+                                <div class="card-body p-4">
 
-			</div>
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <img src="@item.Product.ImageUrl"
+                                             class="img-fluid">
+                                        </div>
 
-			<div class="card-footer">
-				<div class="card-footer row">
-					<div class="col-sm-12 col-lg-4 col-md-6 offset-lg-8 offset-md-6 ">
-						<a asp-action="Summary" class="btn btn-success form-control">Summary</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                                        <div class="col-md-3">
+                                            <div>
+                                                <p class="product_card_main_text d-flex justify-content-center mt-3 ">NAME</p>
+                                                <p class="lead fw-normal product_card_secondary_text d-flex justify-content-center">@item.Product.Name</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <div>
+                                                <p class="product_card_main_text d-flex justify-content-center mt-3">SIZE</p>
+                                                <p class="lead fw-normal product_card_secondary_text d-flex justify-content-center">
+                                                    @item.Size
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 ">
+                                            <div>
+                                                <p class="product_card_main_text d-flex justify-content-center mt-3">QUANTITY</p>
+
+                                                <div class="d-flex justify-content-center">
+                                                    <a asp-action="minus" asp-route-cartId="@item.Id" class="btn btn-filter bg-0 product_card_secondary_text ">
+                                                        <i class="bi bi-dash"></i>
+                                                    </a>
+                                                    <a class="m-2 text-decoration-none product_card_secondary_text product_card_secondary_text">
+                                                        @item.Count
+                                                    </a>
+                                                    <a asp-action="plus" asp-route-cartId="@item.Id" class="btn btn-filter bg-0 product_card_secondary_text">
+                                                        <i class="bi bi-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <div>
+                                                <p class="product_card_main_text d-flex justify-content-center mt-3">PRICE</p>
+                                                <p class="lead fw-normal product_card_secondary_text d-flex justify-content-center">$@item.Product.Price</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <div>
+                                                <p class="product_card_main_text d-flex justify-content-center mt-3">TOTAL</p>
+                                                <p class="lead fw-normal product_card_secondary_text d-flex justify-content-center">$@item.Price</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 d-flex justify-content-end mt-4">
+                                            <a asp-action="remove" asp-route-cartId="@item.Id" class="btn bg-0 product_card_secondary_text">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="d-flex justify-content-end">
+                            <p class="product_card_main_text mb-4 pb-2">TOTAL PRICE &nbsp;
+                            <p class="product_card_accent_text">  @Model.OrderHeader.OrderTotal.ToString() $</p>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-continue btn-lg me-2">CONTINUE SHOPPING</a>
+                            <a asp-action="Summary" class="btn btn-continue btn-lg">TO ORDER</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 </form>
+
+
+
+
+
+
+
+
+

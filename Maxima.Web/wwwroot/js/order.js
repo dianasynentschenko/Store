@@ -32,23 +32,106 @@ $(document).ready(function () {
 
 function loadDataTable(status) {
     dataTable = $('#tblData').DataTable({
+        "order": [[1, 'desc']],
+
+        "pageLength": 100,
         "ajax": {
             "url": "/Admin/Order/GetAll?status=" + status
         },
+
+
         "columns": [
-            { "data": "id", "width": "15%" },
-            { "data": "name", "width": "15%" },
-            { "data": "phoneNumber", "width": "15%" },
-            { "data": "applicationUser.email", "width": "15%" },
-            { "data": "orderStatus", "width": "15%" },
-            { "data": "orderTotal", "width": "15%" },
+            {
+                "data": "id",
+                "render": function (data) {
+                    return `
+                        
+			    	<p class="lead fw-normal product_card_secondary_text mt-3  text-uppercase">
+                       ${data}
+                     </p>
+                        `
+                },
+                "width": "10%"
+            },
+            {
+                "data": "orderDate",
+                "render": function (data) {
+                    return `
+                        
+			    	<p class="lead fw-normal product_card_secondary_text mt-3  text-uppercase">
+                       ${data}
+                     </p>
+                        `
+                },
+                "width": "20%"
+            },
+            {
+                "data": "name",
+                "render": function (data) {
+                    return `
+                        
+			    	<p class="lead fw-normal product_card_secondary_text mt-3  text-uppercase">
+                       ${data}
+                     </p>
+                        `
+                },
+                "width": "20%"
+            },
+            {
+                "data": "phoneNumber",
+                "render": function (data) {
+                    return `
+                        
+			    	<p class="lead fw-normal product_card_secondary_text mt-3  text-uppercase">
+                       ${data}
+                     </p>
+                        `
+                },
+                "width": "15%"
+            },
+            {
+                "data": "applicationUser.email",
+                "render": function (data) {
+                    return `
+                        
+			    	<p class="lead fw-normal product_card_secondary_text mt-3  text-uppercase">
+                       ${data}
+                     </p>
+                        `
+                },
+                "width": "15%"
+            },
+            {
+                "data": "orderStatus",
+                "render": function (data) {
+                    return `
+                        
+			    	<p class="lead fw-normal product_card_secondary_text mt-3  text-uppercase">
+                       ${data}
+                     </p>
+                        `
+                },
+                "width": "15%"
+            },
+            {
+                "data": "orderTotal",
+                "render": function (data) {
+                    return `
+                        
+			    	<p class="lead fw-normal product_card_secondary_text mt-3  text-uppercase">
+                       ${data}
+                     </p>
+                        `
+                },
+                "width": "15%"
+            },
             {
                 "data": "id",
                 "render": function (data) {
                     return `
                         <div class="w-75 btn-group" role="group">
                         <a href="/Admin/Order/Details?orderId=${data}"
-                        class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Details</a>
+                        class="btn btn-filter mx-2 d-flex justify-content-center mt-2"> <i class="bi bi-pencil-fill"></i></a>
                         
 					</div>
                         `
@@ -56,5 +139,8 @@ function loadDataTable(status) {
                 "width": "15%"
             }
         ]
+
+        
     });
 }
+

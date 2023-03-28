@@ -22,6 +22,28 @@ namespace Maxima.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Maxima.Models.AdditionalImg", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AdditionalImgUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TovarId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TovarId");
+
+                    b.ToTable("AdditionalImg");
+                });
+
             modelBuilder.Entity("Maxima.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -103,6 +125,12 @@ namespace Maxima.DataAccess.Migrations
                     b.Property<double>("OrderTotal")
                         .HasColumnType("float");
 
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentStatus")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -162,14 +190,9 @@ namespace Maxima.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SizeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("SizeId");
 
                     b.ToTable("Product");
                 });
@@ -192,6 +215,10 @@ namespace Maxima.DataAccess.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Size")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
@@ -212,27 +239,11 @@ namespace Maxima.DataAccess.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Size");
-                });
-
-            modelBuilder.Entity("Maxima.Models.Test", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TestSize")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -243,7 +254,7 @@ namespace Maxima.DataAccess.Migrations
 
                     b.HasIndex("TovarId");
 
-                    b.ToTable("Test");
+                    b.ToTable("Size");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -473,6 +484,15 @@ namespace Maxima.DataAccess.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
+            modelBuilder.Entity("Maxima.Models.AdditionalImg", b =>
+                {
+                    b.HasOne("Maxima.Models.Product", null)
+                        .WithMany("AdditionalImg")
+                        .HasForeignKey("TovarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Maxima.Models.OrderDetail", b =>
                 {
                     b.HasOne("Maxima.Models.OrderHeader", "OrderHeader")
@@ -511,15 +531,7 @@ namespace Maxima.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Maxima.Models.Size", "Size")
-                        .WithMany()
-                        .HasForeignKey("SizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Category");
-
-                    b.Navigation("Size");
                 });
 
             modelBuilder.Entity("Maxima.Models.ShoppingCart", b =>
@@ -541,10 +553,10 @@ namespace Maxima.DataAccess.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Maxima.Models.Test", b =>
+            modelBuilder.Entity("Maxima.Models.Size", b =>
                 {
                     b.HasOne("Maxima.Models.Product", null)
-                        .WithMany("Test")
+                        .WithMany("Size")
                         .HasForeignKey("TovarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -603,7 +615,9 @@ namespace Maxima.DataAccess.Migrations
 
             modelBuilder.Entity("Maxima.Models.Product", b =>
                 {
-                    b.Navigation("Test");
+                    b.Navigation("AdditionalImg");
+
+                    b.Navigation("Size");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,7 +8,12 @@ namespace Maxima.Models.ViewModels
 {
     public class DetailsVM
     {
-       
-        public ShoppingCart ShoppingCart { get; set; }
+
+        public DetailsVM()
+        {
+            Product = new Product();
+        }
+
+        public Product Product { get; set; }
     }
 }

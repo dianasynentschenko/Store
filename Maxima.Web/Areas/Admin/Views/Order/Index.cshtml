@@ -37,34 +37,36 @@
 <div class="p-3">
     <div class="d-flex justify-content-between pt-4">
         <div class="pt-2">
-            <h2 class="text-primary">Order List</h2>
+                 <p class="product_card_secondary_text text-uppercase">
+           orders
+        </p>
 		</div>
         <div class="pt-2">
 			
              <ul class="list-group list-group-horizontal-sm">
                 <a style="text-decoration:none;" asp-controller="Order"
                     asp-action="Index" asp-route-status="newOrder">
-                    <li class="list-group-item @newOrder">Нове замовлення</li>
+                    <li class="list-group-item text-uppercase @newOrder">New</li>
                 </a>
                 <a style="text-decoration:none;" asp-controller="Order"
                     asp-action="Index" asp-route-status="confirmed">
-                    <li class="list-group-item @confirmed">Підтверджене</li>
+                    <li class="list-group-item text-uppercase @confirmed">Confirmed</li>
                 </a>
                 <a style="text-decoration:none;" asp-controller="Order"
                     asp-action="Index" asp-route-status="inProcessing">
-                    <li class="list-group-item @inProcessing">В обробці</li>
+                    <li class="list-group-item text-uppercase @inProcessing">In processing</li>
                 </a>
                 <a style="text-decoration:none;" asp-controller="Order"
                     asp-action="Index" asp-route-status="sending">
-                    <li class="list-group-item @sending">Відправлене</li>
+                    <li class="list-group-item text-uppercase @sending">Sending</li>
                 </a>
                 <a style="text-decoration:none;" asp-controller="Order"
                     asp-action="Index" asp-route-status="receive">
-                    <li class="list-group-item @receive">Отримане</li>
+                    <li class="list-group-item text-uppercase @receive">Recive</li>
                 </a>
                 <a style="text-decoration:none;" asp-controller="Order"
                     asp-action="Index" asp-route-status="all">
-                    <li class="list-group-item @all">Усе</li>
+                    <li class="list-group-item text-uppercase @all">All</li>
                 </a>
             </ul>
 
@@ -73,15 +75,16 @@
 	</div>
     <br /><br />
 
-<table  id="tblData"  class="table table-bordered table-striped" style="width:100%">
+<table  id="tblData"  class="table table-striped table-hover" style="width:100%">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Phone Number</th>
-            <th>Email</th>
-            <th>Status</th>
-            <th>Total</th>
+            <th class="product_card_main_text text-uppercase">Id</th>
+            <th class="product_card_main_text text-uppercase">Date</th>
+            <th class="product_card_main_text text-uppercase">Name</th>
+            <th class="product_card_main_text text-uppercase">Phone</th>
+            <th class="product_card_main_text text-uppercase">Email</th>
+            <th class="product_card_main_text text-uppercase">Status</th>
+            <th class="product_card_main_text text-uppercase">Total</th>
             <th></th>
 		</tr>
 	</thead>
@@ -90,4 +93,8 @@
 
 @section Scripts{
     <script src="~/js/order.js"></script>
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+
+   @* <script src="~/js/signalr.js"></script>*@
+
 }

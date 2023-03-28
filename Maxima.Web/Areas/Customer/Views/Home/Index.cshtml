@@ -1,33 +1,178 @@
-﻿@model IEnumerable<Maxima.Models.Product>
+﻿@model Maxima.Models.ViewModels.HomeVM
+
+<div class="offcanvas offcanvas-start bg-gradient-primary" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title product_card_secondary_text" id="offcanvasExampleLabel">LOON&MOON</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+
+        <button class="btn btn-lg btn-filter product_card_secondary_text text-uppercase filter-btn" data-filter="all">All</button>
+
+        @foreach (var obj in Model.Categories)
+        {
+            <br />
+            <button class="btn btn-lg btn-filter product_card_secondary_text text-uppercase filter-btn" data-filter="@obj.Name.Replace(' ','_')">
+                @obj.Name
+            </button>
+        }
+
+        <div>
+            <br />
+            <a class="btn btn-lg btn-filter product_card_secondary_text" role="button" href="https://www.instagram.com/available.designing//" style="color: #47343F">
+                <i class="bi bi-instagram"></i>
+            </a>
+            <a class="btn btn-lg btn-filter product_card_secondary_text ps-0" role="button" style="color: #47343F">
+                <i class="bi bi-twitter"></i>
+            </a>
+        </div>
+    </div>
+    <div class="footer">
+        <a class="btn btn-lg btn-filter product_card_secondary_text" role="button" style="color: #47343F">
+            <i class="bi bi-telephone-fill"></i> 0 (800) 77 00 00
+        </a>
+        <br />
+        <a class="btn btn-lg btn-filter product_card_secondary_text" role="button" style="color: #47343F">
+            <i class="bi bi-envelope-fill"></i> loon&moon@gmail.com
+        </a>
+    </div>
+
+</div>
+
+
+<div class="m-2">
+    <p class="product_card_secondary_text text-uppercase">
+        new products
+    </p>
+</div>
+
+<div class="container ps-0">
+
+
+    <div id="myCarousel" class="carousel slide container" data-bs-ride="carousel">
+        <div class="carousel-inner w-100">
+            @{
+                int i = 0;
+            }
+            @foreach (var item in Model.Products.Where(i => i.Category.Name is "new"))
+            {
+                i++;
+                var active = i == 1 ? "active" : "";
+
+                <div class="carousel-item @active">
+                    <div class="col-md-2">
+                        <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+                            <a asp-action="Details" asp-route-productId="@item.Id">
+                                <img src="@item.ImageUrl" class="img-fluid">
+                                <div class="carousel-caption d-none d-md-block">
+                                </div>
+                            </a>
+                            <div class="product_card_main_text" style="font-size:12px">@item.Name</div>
+                            <div class="product_card_secondary_text" style="font-size:12px">@item.Price.ToString("0.00") $</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button class="carousel-control-prev " type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon " aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+
+<div class="m-2 pt-4">
+    <p class="product_card_secondary_text text-uppercase">
+        low prices
+    </p>
+</div>
+
+<div class="container ps-0">
+@*
+
+    <div id="myCarousel1" class="carousel slide container" data-bs-ride="carousel">
+        <div class="carousel-inner w-100">
+            @{
+                int i2 = 0;
+            }
+            @foreach (var item in Model.Products.Where(i => i.Price < 40))
+            {
+                i2++;
+                var active = i2 == 1 ? "active" : "";
+
+                <div class="carousel-item @active">
+                    <div class="col-md-2">
+                        <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+                            <a asp-action="Details" asp-route-productId="@item.Id">
+                                <img src="@item.ImageUrl" class="img-fluid">
+                                <div class="carousel-caption d-none d-md-block">
+                                </div>
+                            </a>
+                            <div class="product_card_main_text" style="font-size:12px">@item.Name</div>
+                            <div class="product_card_secondary_text" style="font-size:12px">@item.Price.ToString("0.00") $</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+
+        <button class="carousel-control-prev " type="button" data-bs-target="#myCarousel1" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon " aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel1" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>*@
 
 
 <div class="row pb-3">
-	@foreach(var product in Model)
-	{
-		<div class="col-lg-3 col-md-6">
-			<div class="row p-2">
-				<div class="col-12 p-1" style="border:1px solid #008cba; border-radius: 5px;">
-					<div class="card">
-						<img src="@product.ImageUrl" class="card-img-top rounded"/>
+    <div class="ms-0 pt-4 pb-4">
+        <a class="btn btn-filter product_card_secondary_text" style="color: #47343F" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+            FILTER <i class="bi bi-caret-down-fill"></i>
+        </a>
+    </div>
 
-						<div class="card-body">
-						<div class="pl-1">
-							<p class="card-title h5 text-primary">@product.Name</p>
-							<p class="card-title">@Html.Raw(@product.ShortDesc)</p>
-						</div>
-						<div class="pl-1">
-							<p>Price: @product.Price.ToString("0.00")</p>
-						</div>
-						
-						</div>
-					</div>
-					<div>
-						<a asp-action="Details" class="btn btn-primary form-control" asp-route-productId="@product.Id">
-							Details
-						</a>
-					</div>
-				</div> 
-			</div>
-		</div>
-	}
+    <div class="row">
+        @foreach (var prod in Model.Products)
+        {
+            <partial name="_IndividualProductCard" model="prod" />
+
+        }
+    </div>
 </div>
+
+
+@section Scripts{
+
+        <script>
+            $(document).ready(function () {
+
+                $(".filter-btn").click(function () {
+
+                    var value = $(this).attr('data-filter');
+                    if (value == "all") {
+                        $('.filter').show();
+                    }
+                    else {
+                        $(".filter").not('.' + value).hide();
+                        $('.filter').filter('.' + value).show();
+
+                    }
+                });
+
+            });
+        </script>
+
+        
+      <script src="/js/carousel.js"></script>
+	}

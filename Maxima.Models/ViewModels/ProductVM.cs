@@ -14,15 +14,19 @@ namespace Maxima.Models.ViewModels
         public Product Product { get; set; }
 
         [ValidateNever]
-        public IEnumerable<SelectListItem> CategoryList { get; set; }
+        public IEnumerable<SelectListItem> CategoryList { get; set; }     
+  
+        [ValidateNever]
+        public Size Size { get; set; }
 
         [ValidateNever]
-        public IEnumerable<SelectListItem> SizeList { get; set; }
+        public IEnumerable<Size> SizeList { get; set; }
 
         [ValidateNever]
-        public IEnumerable<Test> TestList { get; set; }
+        public AdditionalImg AdditionalImg  { get; set; }
 
         [ValidateNever]
-        public Test Test { get; set; }
+        public IEnumerable<AdditionalImg> AdditionalImgList { get; set; }
+
     }
 }

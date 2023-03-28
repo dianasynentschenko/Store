@@ -1,0 +1,11 @@
+﻿@model Maxima.Models.ViewModels.HomeVM
+
+  <button class="btn btn-lg btn-filter product_card_secondary_text text-uppercase filter-btn" data-filter="all">All</button>
+      
+            @foreach (var obj in Model.Categories)
+            {
+                <br/>
+                <button class="btn btn-lg btn-filter product_card_secondary_text text-uppercase filter-btn" data-filter="@obj.Name.Replace(' ','_')">
+                    @obj.Name
+                </button>
+            } 

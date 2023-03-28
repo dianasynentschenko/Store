@@ -5,6 +5,7 @@ using Maxima.Models.ViewModels;
 using Maxima.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Maxima.Web.Areas.Admin.Controllers
 {
@@ -17,9 +18,12 @@ namespace Maxima.Web.Areas.Admin.Controllers
         [BindProperty]
         public OrderVM OrderVM { get; set; }
 
+        
+
         public OrderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+          
         }
 
         public IActionResult Index()
@@ -44,6 +48,7 @@ namespace Maxima.Web.Areas.Admin.Controllers
         {
             var orderHEaderFromDb = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id, tracked: false);
             orderHEaderFromDb.Name = OrderVM.OrderHeader.Name;
+            orderHEaderFromDb.OrderDate = OrderVM.OrderHeader.OrderDate;
             orderHEaderFromDb.PhoneNumber = OrderVM.OrderHeader.PhoneNumber;
             orderHEaderFromDb.StreetAddress = OrderVM.OrderHeader.StreetAddress;
             orderHEaderFromDb.City = OrderVM.OrderHeader.City;
@@ -56,8 +61,8 @@ namespace Maxima.Web.Areas.Admin.Controllers
             return RedirectToAction("Details", "Order", new { orderId = orderHEaderFromDb.Id });
         }
 
-        
-        [HttpPost]   
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Confirmed()
         {
@@ -66,6 +71,7 @@ namespace Maxima.Web.Areas.Admin.Controllers
             TempData["Success"] = "Order Status Updated Successfully.";
             return RedirectToAction("Details", "Order", new { orderId = OrderVM.OrderHeader.Id });
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -77,6 +83,8 @@ namespace Maxima.Web.Areas.Admin.Controllers
             return RedirectToAction("Details", "Order", new { orderId = OrderVM.OrderHeader.Id });
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Sending()
@@ -86,6 +94,8 @@ namespace Maxima.Web.Areas.Admin.Controllers
             TempData["Success"] = "Order Status Updated Successfully.";
             return RedirectToAction("Details", "Order", new { orderId = OrderVM.OrderHeader.Id });
         }
+
+
 
         #region API CALLS
         [HttpGet]       

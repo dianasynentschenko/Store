@@ -23,11 +23,15 @@ namespace Maxima.Web.Controllers
             _unitOfWork = unitOfWork;
         }
 
+   
         public IActionResult Index()
         {
-            IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category");
-
-            return View(productList);
+            HomeVM homeVM = new HomeVM()
+            {
+                Products = _unitOfWork.Product.GetAll(includeProperties: "Category"),
+                Categories = _unitOfWork.Category.GetAll()
+            };
+            return View(homeVM);
         }
 
         public IActionResult Details(int productId)
@@ -36,19 +40,9 @@ namespace Maxima.Web.Controllers
             {
                 Count = 1,
                 ProductId = productId,
-                Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == productId, includeProperties: "Category,Size,Test"),
-
-                // ProductSize = _unitOfWork.ProductSize.GetAll(u => u.Id == productId,includeProperties: "Size").ToList(),
-                //ProductSize = _unitOfWork.ProductSize.GetAll(u => u.Id == productId, includeProperties: "ProductSize"),
+                Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == productId, includeProperties: "Category,Size,AdditionalImg"),              
 
             };
-
-            //DetailsVM = new DetailsVM()
-            //{
-            //    ShoppingCart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == productId, includeProperties: "Category"),
-            //    ListProductSize = _unitOfWork.ProductSize.GetAll(u => u.Id == productId, includeProperties: "ProductSize"),
-            //};
-
 
             return View(cartObj);
         }
@@ -63,9 +57,10 @@ namespace Maxima.Web.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             shoppingCart.ApplicationUserId = claim.Value;
+          
 
-            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.GetFirstOrDefault(
-          u => u.ApplicationUserId == claim.Value && u.ProductId == shoppingCart.ProductId);
+            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.ApplicationUserId == claim.Value 
+            && u.ProductId == shoppingCart.ProductId );
 
             if (cartFromDb == null)
             {
@@ -77,18 +72,13 @@ namespace Maxima.Web.Controllers
             }
             else
             {
-                _unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
+                _unitOfWork.ShoppingCart.Add(shoppingCart);
+               // _unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
                 _unitOfWork.Save();
             }
 
-
-
-
-
-
-
-            _unitOfWork.Save();
-            return RedirectToAction(nameof(Index));
+    
+            return RedirectToAction("Index");
         }
 
 

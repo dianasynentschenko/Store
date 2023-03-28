@@ -1,0 +1,58 @@
+﻿@model AdditionalImg
+
+<form method="post" enctype="multipart/form-data">
+
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Create AdditionalImg</h2>
+            <hr />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AdditionalImgUrl"></label>
+            <input type="file" id="file" name="PostedFile" class="form-control" />
+        </div>
+
+
+        <button type="submit" class="btn text-black btn-primary" style="width:150px">Create</button>
+
+        <a asp-controller="AdditionalImg" asp-action="Index" class="btn btn-secondary" style="width:150px">
+            Back to List
+        </a>
+    </div>
+</form>
+
+@section Scripts{
+	@{
+    <partial name="_ValidationScriptsPartial" />
+	}
+
+<script>
+
+
+       tinymce.init({
+         selector: '#mytextarea',
+         plugins: [
+           'a11ychecker','advlist','advcode','advtable','autolink','checklist','export',
+           'lists','link','image','charmap','preview','anchor','searchreplace','visualblocks',
+           'powerpaste','fullscreen','formatpainter','insertdatetime','media','table','help','wordcount'
+         ],
+         toolbar: 'undo redo | formatpainter casechange blocks | bold italic backcolor | ' +
+           'alignleft aligncenter alignright alignjustify | ' +
+           'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+
+    });
+
+     function ValidateInput(){
+         if(document.getElementById("file").value==""){
+             Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: 'Please upload an Image!',
+             });
+             return false;
+         }
+         return true;
+     }
+</script>
+}

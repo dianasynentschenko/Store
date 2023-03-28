@@ -19,7 +19,7 @@ namespace Maxima.DataAccess.Repository
 
         public void Update(Size obj)
         {
-            _db.Size.Update(obj);
+            _db.Size.Update(obj);            
         }
     }
 }

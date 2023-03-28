@@ -1,0 +1,198 @@
+﻿@model Maxima.Models.ViewModels.DashboardVM
+@using Maxima.Utility
+@using System.Collections
+
+<div class="container ps-0">
+
+
+    @{
+        var totalToday = 0;
+        @foreach (var item in ViewBag.SelectTotalToday)
+        {
+            totalToday += item;
+
+        }
+    }
+
+    @{
+        var totalWeek = 0;
+        @foreach (var item in ViewBag.SelectTotalWeek)
+        {
+            totalWeek += item;
+
+        }
+    }
+
+    @{
+        var totalMonth = 0;
+        @foreach (var item in ViewBag.SelectTotalMonth)
+        {
+            totalMonth += item;
+
+        }
+    }
+
+    @{
+        var totalQuarter = 0;
+        @foreach (var item in ViewBag.SelectTotalQuarter)
+        {
+            totalQuarter += item;
+
+        }
+    }
+
+
+    <div class="container ps-0 d-flex justify-content-center">
+        <div class="col-md-2 m-4">
+            <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+                <img src="" class="img-fluid">
+                <div class="product_card_main_text text-uppercase d-flex justify-content-center"> Revenue </div>
+                <div class="product_card_accent_text text-uppercase d-flex justify-content-center mt-2 " style="font-weight:700"> $ @totalToday.ToString("0.00") <p class="product_card_secondary_text text-uppercase" style="font-size:12px"> &nbsp; / day </p></div>
+            </div>
+        </div>
+
+        <div class="col-md-2 m-4">
+            <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+                <img src="" class="img-fluid">
+                <div class="product_card_main_text text-uppercase d-flex justify-content-center"> Revenue </div>
+                <div class="product_card_accent_text text-uppercase d-flex justify-content-center mt-2 " style="font-weight:700"> $ @totalWeek.ToString("0.00") <p class="product_card_secondary_text text-uppercase" style="font-size:12px"> &nbsp; / week </p></div>
+            </div>
+        </div>
+
+        <div class="col-md-2 m-4">
+            <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+                <img src="" class="img-fluid">
+                <div class="product_card_main_text text-uppercase d-flex justify-content-center"> Revenue </div>
+                <div class="product_card_accent_text text-uppercase d-flex justify-content-center mt-2 " style="font-weight:700"> $ @totalMonth.ToString("0.00") <p class="product_card_secondary_text text-uppercase" style="font-size:12px"> &nbsp; / month </p></div>
+            </div>
+        </div>
+
+        <div class="col-md-2 m-4">
+            <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+                <img src="" class="img-fluid">
+                <div class="product_card_main_text text-uppercase d-flex justify-content-center"> Revenue </div>
+                <div class="product_card_accent_text text-uppercase d-flex justify-content-center mt-2 " style="font-weight:700"> $ @totalQuarter.ToString("0.00") <p class="product_card_secondary_text text-uppercase" style="font-size:12px"> &nbsp; / quarter </p></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container ps-0 d-flex justify-content-center">
+        <div class="col-md-2 m-4">
+            <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+                <img src="" class="img-fluid">
+                <div class="product_card_main_text text-uppercase d-flex justify-content-center">
+                    Orders
+                    <a class="btn btn-lg btn-filter product_card_secondary_text position-absolute top-0 end-0" role="button" style="color: #47343F" asp-controller="Order"
+                       asp-action="Index" asp-route-status="confirmed">
+                        <i class="bi bi-box-arrow-in-up-right"></i>
+                    </a>
+                </div>
+                <div class="product_card_accent_text text-uppercase d-flex justify-content-center mt-2 " style="font-weight:700">
+                    @ViewBag.SelectOrdersToday.ToString()
+                    <p class="product_card_secondary_text text-uppercase" style="font-size:12px"> &nbsp; / today </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 m-4">
+            <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+                <img src="" class="img-fluid">
+                <div class="product_card_main_text text-uppercase d-flex justify-content-center">
+                    Orders
+                    <a class="btn btn-lg btn-filter product_card_secondary_text position-absolute top-0 end-0" role="button" style="color: #47343F" asp-controller="Order"
+                       asp-action="Index" asp-route-status="confirmed">
+                        <i class="bi bi-box-arrow-in-up-right"></i>
+                    </a>
+                </div>
+                <div class="product_card_accent_text text-uppercase d-flex justify-content-center mt-2 " style="font-weight:700">
+                    @ViewBag.SelectOrdersNew.ToString()
+                    <p class="product_card_secondary_text text-uppercase" style="font-size:12px"> &nbsp; / new </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 m-4">
+            <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+                <img src="" class="img-fluid">
+                <div class="product_card_main_text text-uppercase d-flex justify-content-center">
+                    Orders
+                    <a class="btn btn-lg btn-filter product_card_secondary_text  position-absolute top-0 end-0" role="button" style="color: #47343F" asp-controller="Order"
+                       asp-action="Index" asp-route-status="inProcessing">
+                        <i class="bi bi-box-arrow-in-up-right"></i>
+                    </a>
+                </div>
+                <div class="product_card_accent_text text-uppercase d-flex justify-content-center mt-2 " style="font-weight:700">  @ViewBag.SelectOrdersTodayInProcessing.ToString() <p class="product_card_secondary_text text-uppercase" style="font-size:12px"> &nbsp; / In Processing </p></div>
+            </div>
+        </div>
+
+        <div class="col-md-2 m-4">
+            <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+                <img src="" class="img-fluid">
+                <div class="product_card_main_text text-uppercase d-flex justify-content-center">
+                    Orders
+                    <a class="btn btn-lg btn-filter product_card_secondary_text  position-absolute top-0 end-0" role="button" style="color: #47343F" asp-controller="Order"
+                       asp-action="Index" asp-route-status="sending">
+                        <i class="bi bi-box-arrow-in-up-right"></i>
+                    </a>
+                </div>
+                <div class="product_card_accent_text text-uppercase d-flex justify-content-center mt-2 " style="font-weight:700">  @ViewBag.SelectOrdersTodaySending.ToString() <p class="product_card_secondary_text text-uppercase" style="font-size:12px"> &nbsp; / sending </p></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-6 m-0 p-0">
+            <div class="ps-0 d-flex justify-content-center pt-4">
+                <p class="product_card_secondary_text text-uppercase">
+                    most income today
+                </p>
+            </div>
+
+            <div class="container ps-0 d-flex justify-content-center">
+                @foreach (var item in @ViewBag.SelectTop5ProductsToday)
+                {
+                    <div class="col-md-2">
+                        <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+                            @foreach (var item2 in @Model.ProductVM.Where(i => i.Id == @item))
+                            {
+                                <img src="@item2.ImageUrl" class="img-fluid">
+                                <div class="carousel-caption d-none d-md-block"></div>
+                                <div class="product_card_secondary_text" style="font-size:12px">@item2.Price.ToString("0.00") $</div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-6 m-0 p-0">
+            <div class="ps-0 d-flex justify-content-center pt-4">
+                <p class="product_card_secondary_text text-uppercase">
+                    most popular today
+                </p>
+            </div>
+
+            <div class="container ps-0 d-flex justify-content-center">
+                @foreach (var item in @ViewBag.Selectop5PopularToday)
+                {
+                    <div class="col-md-2">
+                        <div class=" p-2 card card-body border-0 rounded-0" style="background: #BFB1B1">
+
+                            @foreach (var item2 in @Model.ProductVM.Where(i => i.Id == @item))
+                            {
+                                <img src="@item2.ImageUrl" class="img-fluid">
+                                <div class="carousel-caption d-none d-md-block"></div>
+                                <div class="product_card_secondary_text" style="font-size:12px">@item2.Price.ToString("0.00") $</div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    

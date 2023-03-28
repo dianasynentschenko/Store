@@ -1,24 +1,25 @@
 ﻿<div class="container p-3">
     <div class="row pt-4">
-        <div class="col-6">
-            <h2 class="text-primary">Product List</h2>
+        <div class="col-9">
+           <p class="product_card_secondary_text text-uppercase">
+           products
+        </p>
 		</div>
-        <div class="col-6 text-end">
-            <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary">
-               <i class="bi bi-plus-circle"></i> &nbsp; Create New Product
+        <div class="col-3 top-0 end-0">
+            <a asp-controller="Product" asp-action="Upsert" class="btn btn-continue text-uppercase">
+                Create new Product
 			</a>
 		</div>
 	</div>
     <br /><br />
 
-<table  id="tblData"  class="table table-bordered table-striped" style="width:100%">
+<table  id="tblData"  class="table table-striped table-hover" style="width:100%">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>ShortDesc</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Category</th>
+            <th ></th>
+            <th class="product_card_main_text text-uppercase">Name</th>           
+            <th class="product_card_main_text text-uppercase">Price</th>
+            <th class="product_card_main_text text-uppercase">Category</th>            
             <th></th>
 		</tr>
 	</thead>

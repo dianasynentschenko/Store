@@ -1,4 +1,5 @@
 ﻿
+
 using Maxima.DataAccess.Repository.IRepository;
 using Maxima.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,6 @@ namespace Maxima.Web.Areas.Admin.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-       
-
-
         public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment hostEnvironment)
         {
             _unitOfWork = unitOfWork;
@@ -23,7 +21,7 @@ namespace Maxima.Web.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-           
+
             return View();
         }
 
@@ -39,46 +37,20 @@ namespace Maxima.Web.Areas.Admin.Controllers
                     Value = i.Id.ToString()
                 }),
 
-                SizeList = _unitOfWork.Size.GetAll().Select(i => new SelectListItem
-                {
-                    Text = i.Name,
-                    Value = i.Id.ToString()
-                }),
+                AdditionalImgList = _unitOfWork.AdditionalImg.GetAll(i => i.TovarId == id),
 
-                // u => u.Id == id,
-                //includeProperties: "Product"
+                SizeList = _unitOfWork.Size.GetAll(i => i.TovarId == id),
 
-
-
-               //Test = new(),
-
-
-            //16 02 22    17 45
-                TestList = _unitOfWork.Test.GetAll(i => i.TovarId == id)
-
-
-        };
-
-
+            };
 
             if (id == null || id == 0)
             {
-                //create product
-                //ViewBag.CategoryList = CategoryList;
-                //ViewData["CoverTypeList"] = CoverTypeList;
-
-               
                 return View(productVM);
             }
             else
             {
-              
-
-
-                productVM.Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);    
+                productVM.Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
                 return View(productVM);
-             
-                //update product
 
             }
 
@@ -93,8 +65,6 @@ namespace Maxima.Web.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-               
-
 
                 string wwwRootPath = _hostEnvironment.WebRootPath;
                 if (file != null)
@@ -122,25 +92,15 @@ namespace Maxima.Web.Areas.Admin.Controllers
                 if (obj.Product.Id == 0)
                 {
                     _unitOfWork.Product.Add(obj.Product);
-                    
-                    
+
                 }
                 else
                 {
                     _unitOfWork.Product.Update(obj.Product);
-                    
 
                 }
 
-
-               
-
-
-
                 _unitOfWork.Save();
-
-
-              
 
                 TempData["success"] = $"Product created successfully {obj.Product.Id}";
                 return RedirectToAction("Index");

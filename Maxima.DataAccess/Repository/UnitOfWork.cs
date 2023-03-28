@@ -22,8 +22,7 @@ namespace Maxima.DataAccess.Repository
             OrderHeader = new OrderHeaderRepository(_db);
             OrderDetail = new OrderDetailRepository(_db);
             Size = new SizeRepository(_db);
-            Test = new TestRepository(_db);
-           
+            AdditionalImg = new AdditionalImgRepository(_db);
 
         }
 
@@ -38,7 +37,7 @@ namespace Maxima.DataAccess.Repository
         public IOrderDetailRepository OrderDetail { get; private set; }
 
         public ISizeRepository Size { get; private set; }   
-        public ITestRepository Test { get; private set; }
+        public IAdditionalImgRepository AdditionalImg { get; private set; }
 
         public void Save()
         {

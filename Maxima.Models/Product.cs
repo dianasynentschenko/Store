@@ -21,26 +21,20 @@ namespace Maxima.Models
         public double Price { get; set; }
         [ValidateNever]
         public string ImageUrl { get; set; }
-
         [Required]
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         [ValidateNever]
         public Category Category { get; set; }
-
-
-        [Required]
-        [Display(Name = "Size")]
-        public int SizeId { get; set; }
-        [ForeignKey("SizeId")]
-        [ValidateNever]
-        public Size Size { get; set; }
-
-        // public List<Test> Test { get; set; }
-
         [ForeignKey("TovarId")]
         [ValidateNever]
-        public List<Test> Test { get; set; }
+        public List<Size> Size { get; set; }
+        [ForeignKey("TovarId")]
+        [ValidateNever]
+        public List<AdditionalImg> AdditionalImg { get; set; }
+
+
     }
+
 }

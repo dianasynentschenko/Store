@@ -1,0 +1,25 @@
+﻿@model Maxima.Models.Product
+
+@using Maxima.Models
+
+<div class="col-lg-4 col-md-3 pb-4 filter @Model.Category.Name.Replace(' ','_')">
+    <!-- Card-->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 ">
+                <a asp-action="Details" asp-route-productId="@Model.Id">
+                    <img src="@Model.ImageUrl" class="card-img-top position-relative" />
+                </a>
+            </div>
+
+            <div class="row g-0 mt-2 mb-5 position-relative">
+                <div class="product_card_main_text text-uppercase">@Model.Name</div>
+                <div class="product_card_secondary_text">@Model.Price.ToString("0.00") $</div>
+                <div class="product_card_accent_text text-uppercase">@Model.Category.Name</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -18,9 +18,7 @@ namespace Maxima.DataAccess.Repository.IRepository
         IOrderHeaderRepository OrderHeader { get; }
 
         ISizeRepository Size { get; }
-
-        ITestRepository Test { get; }
-       
+        IAdditionalImgRepository AdditionalImg { get; }       
 
         void Save();
     }

@@ -79,6 +79,7 @@ namespace Maxima.Web.Areas.Admin.Controllers
                 TempData["success"] = "Size updated successfully";
                 return RedirectToAction("Index");
             }
+                       
             return View(obj);
         }
 

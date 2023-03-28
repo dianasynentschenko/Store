@@ -4,6 +4,8 @@ using Maxima.Models.ViewModels;
 using Maxima.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Stripe.Checkout;
 using System.Security.Claims;
 
 namespace Maxima.Web.Areas.Customer.Controllers
@@ -16,11 +18,11 @@ namespace Maxima.Web.Areas.Customer.Controllers
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
         public int OrderTotal { get; set; }
-        
 
         public CartController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+           
         }
 
         public IActionResult Index()
@@ -36,13 +38,10 @@ namespace Maxima.Web.Areas.Customer.Controllers
             };
             foreach (var cart in ShoppingCartVM.ListCart)
             {
+
                 cart.Price = GetPriceBasedOnQuantity(cart.Count, cart.Product.Price);
                 ShoppingCartVM.OrderHeader.OrderTotal += cart.Price;
             }
-
-
-
-
             return View(ShoppingCartVM);
         }
 
@@ -71,7 +70,7 @@ namespace Maxima.Web.Areas.Customer.Controllers
 
             foreach (var cart in ShoppingCartVM.ListCart)
             {
-                cart.Price = GetPriceBasedOnQuantity(cart.Count, cart.Product.Price);              
+                cart.Price = GetPriceBasedOnQuantity(cart.Count, cart.Product.Price);
                 ShoppingCartVM.OrderHeader.OrderTotal += cart.Price;
             }
             return View(ShoppingCartVM);
@@ -81,7 +80,7 @@ namespace Maxima.Web.Areas.Customer.Controllers
         [HttpPost]
         [ActionName("Summary")]
         [ValidateAntiForgeryToken]
-        public IActionResult SummaryPOST()
+        public async Task<IActionResult> SummaryPOST()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -92,7 +91,6 @@ namespace Maxima.Web.Areas.Customer.Controllers
 
             ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
             ShoppingCartVM.OrderHeader.ApplicationUserId = claim.Value;
-            ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusNewOrder;
 
 
             foreach (var cart in ShoppingCartVM.ListCart)
@@ -101,6 +99,11 @@ namespace Maxima.Web.Areas.Customer.Controllers
                 ShoppingCartVM.OrderHeader.OrderTotal += cart.Price;
             }
 
+            ApplicationUser applicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(u => u.Id == claim.Value);
+
+
+            //ShoppingCartVM.OrderHeader.PaymentStatus = SD.StatusNewOrder;
+            //ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusNewOrder;
 
             _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
             _unitOfWork.Save();
@@ -119,18 +122,110 @@ namespace Maxima.Web.Areas.Customer.Controllers
                 _unitOfWork.Save();
             }
 
-            _unitOfWork.ShoppingCart.RemoveRange(ShoppingCartVM.ListCart);
+
+
+            //stripe
+            var domain = "https://localhost:7077/";
+            var options = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string>
+                {
+                    "card",
+                },
+
+                LineItems = new List<SessionLineItemOptions>(),
+                Mode = "payment",
+                SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
+                CancelUrl = domain + $"customer/cart/index",
+            };
+
+            foreach (var item in ShoppingCartVM.ListCart)
+            {
+
+                var sessionLineItem = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        //2000 -> 20.00
+                        UnitAmount = (long)(item.Product.Price * 100),
+                        Currency = "usd",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.Product.Name,
+                        },
+                    },
+                    Quantity = item.Count,
+                };
+                options.LineItems.Add(sessionLineItem);
+                    
+            }
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            _unitOfWork.OrderHeader.UpdateStripePaymentId(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
             _unitOfWork.Save();
+            //await _orderHub.Clients.All.SendAsync("all");
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303);
 
-            return RedirectToAction(nameof(InquiryConfirmation));
 
+            //_unitOfWork.ShoppingCart.RemoveRange(ShoppingCartVM.ListCart);
+            //_unitOfWork.Save();
+
+            //return RedirectToAction(nameof(InquiryConfirmation));
+
+        }
+
+        //public IActionResult OrderConfirmation(int id)
+        //{
+        //    OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id, includeProperties: "ApplicationUser");
+
+        //    var service = new SessionService();
+        //    Session session = service.Get(orderHeader.SessionId);
+        //    //check stripe status
+        //    if (session.PaymentStatus.ToLower() == "paid")
+        //    {
+
+        //        _unitOfWork.OrderHeader.UpdateStripePaymentId(id, orderHeader.SessionId, session.PaymentIntentId);
+        //        _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusConfirmed, SD.StatusConfirmed);
+        //        _unitOfWork.Save();
+        //    }
+        //    List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId ==
+        //    orderHeader.ApplicationUserId).ToList();
+        //    _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+        //    _unitOfWork.Save();
+
+        //    return View(id);
+        //}
+
+
+        public IActionResult OrderConfirmation(int id)
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id, includeProperties: "ApplicationUser");
+
+            var service = new SessionService();
+            Session session = service.Get(orderHeader.SessionId);
+            //check stripe status
+            if (session.PaymentStatus.ToLower() == "paid")
+            {
+
+                _unitOfWork.OrderHeader.UpdateStripePaymentId(id, orderHeader.SessionId, session.PaymentIntentId);
+                _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusConfirmed, SD.StatusConfirmed);
+                _unitOfWork.Save();
+               
+            }
+            List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId ==
+            orderHeader.ApplicationUserId).ToList();
+            _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+            _unitOfWork.Save();           
+
+            return View(id);
         }
 
 
         public IActionResult Plus(int cartId)
-        {
-
-         
+        {    
 
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
             _unitOfWork.ShoppingCart.IncrementCount(cart, 1);

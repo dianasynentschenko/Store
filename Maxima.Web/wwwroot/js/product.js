@@ -6,28 +6,72 @@ $(document).ready(function () {
 
 function loadDataTable() {
     dataTable = $('#tblData').DataTable({
+        "pageLength": 100,
         "ajax": {
             "url": "/Admin/Product/GetAll"
         },
         "columns": [
-            { "data": "name", "width": "15%" },
-            { "data": "shortDesc", "width": "15%" },
-            { "data": "description", "width": "15%" },
-            { "data": "price", "width": "15%" },
-            { "data": "category.name", "width": "15%" },
+            {
+                "data": "imageUrl",
+                "render": function (data) {
+                    return `
+                        
+                        <img  width="50" src="${data}"/>
+				
+                        `
+                },
+                "width": "10%"
+            },
+            { "data": "name", 
+                "render": function (data) {
+                    return `
+                        
+			    	<p class="lead fw-normal product_card_secondary_text mt-3  text-uppercase">
+                       ${data}
+                     </p>
+                        `
+                },
+                "width": "20%",
+            },
+            {
+                "data": "price",
+                "render": function (data) {
+                    return `
+                        
+			    	<p class="lead fw-normal product_card_secondary_text mt-3 text-uppercase">
+                       ${data}
+                     </p>
+                        `
+                },
+
+                "width": "15%"
+            },
+            {
+                "data": "category.name",
+                "render": function (data) {
+                    return `
+                        
+			    	<p class="lead fw-normal product_card_secondary_text mt-3 text-uppercase">
+                       ${data}
+                     </p>
+                        `
+                },
+
+                "width": "20%"
+            },
             {
                 "data": "id",
                 "render": function (data) {
                     return `
                         <div class="w-75 btn-group" role="group">
                         <a href="/Admin/Product/Upsert?id=${data}"
-                        class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
+                        class="btn btn-filter mx-2 d-flex justify-content-center mt-3"> <i class="bi bi-pencil-fill"></i></a>
                         <a onClick=Delete('/Admin/Product/Delete/${data}')
-                        class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
+                        class="btn btn-filter mx-2 d-flex justify-content-center mt-3" ><i class="bi bi-trash-fill"></i></a>
 					</div>
                         `
                 },
-                "width": "15%"
+                "width": "10%"
             }
         ]
     });
